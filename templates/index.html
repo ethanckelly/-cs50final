@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Peanut Gallery
+{% endblock %}
+
+{% block main %}
+    <table class="table">
+        <caption>Top Albums</caption>
+        <thead>
+            <tr>
+                <th>Title</th>
+                <th>Artist</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for album in albums %}
+                <tr>
+                    <td>{{ album.Title }}</td>
+                    <td>{{ album.Artist }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% endblock %}
