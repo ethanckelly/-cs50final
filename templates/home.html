@@ -22,13 +22,16 @@ return Math.floor(Math.random()*101);
             <img class="d-block w-100" src="https://i.scdn.co/image/ab67616d000048510192ca742faf3f8dffa36f6b"
                 alt="First slide">
         </div>
-        {% for top in tops %}
+        {% for cover in covers %}
         <script type="text/javascript">
-            var art = top.project_art;
-            document.getElementById('output').src = art;
+            const art = cover.project_art;
+            //var art = 11;
+            document.getElementById('output').innerHTML = art;
+
         </script>
-        <div class="carousel-item" id="output">
-            <img class="d-block w-100" src="" alt="slide">
+        <p id="output"></p>
+        <div class="carousel-item" id="">
+            <img class="d-block w-100" alt="slide">
         </div>
         {% endfor %}
 
