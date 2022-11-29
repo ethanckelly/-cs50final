@@ -1,76 +1,75 @@
-import os
+{% extends "layout.html" %}
 
-from cs50 import SQL
-from flask import Flask, flash, redirect, render_template, request, session
-from flask_session import Session
-from tempfile import mkdtemp
-from werkzeug.security import check_password_hash, generate_password_hash
+{% block title %}
+Peanut Gallery
+{% endblock %}
 
-from helpers import apology, login_required, lookup
-
-# Configure application
-app = Flask(__name__)
-
-# Ensure templates are auto-reloaded
-app.config["TEMPLATES_AUTO_RELOAD"] = True
-app.config["SESSION_PERMANENT"] = False
-app.config["SESSION_TYPE"] = "filesystem"
-Session(app)
-
-# Configure CS50 Library to use SQLite database
-db = SQL("sqlite:///albums.db")
-
-# Make sure API key is set
-if not os.environ.get("API_KEY"):
-    raise RuntimeError("API_KEY not set")
-
-
-@app.after_request
-def after_request(response):
-    """Ensure responses aren't cached"""
-    response.headers["Cache-Control"] = "no-cache, no-store, must-revalidate"
-    response.headers["Expires"] = 0
-    response.headers["Pragma"] = "no-cache"
-    return response
+{% block main %}
+function random{
+    return Math.floor(Math.random()*101);
+}
+<!-- Slideshow -->
+<!-- adapted from bootstrap: https://getbootstrap.com/docs/4.5/components/carousel/ -->
+<div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+    <ol class="carousel-indicators">
+        <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
+        <li data-target="#carouselExampleIndicators" data-slide-to="1"></li>
+        <li data-target="#carouselExampleIndicators" data-slide-to="2"></li>
+        <li data-target="#carouselExampleIndicators" data-slide-to="3"></li>
+    </ol>
+    <div class="carousel-inner">
+        <div class="carousel-item active">
+            <img class="d-block w-100" src="https://i.scdn.co/image/ab67616d000048510192ca742faf3f8dffa36f6b" alt="First slide">
+        </div>
+        {% for top in tops %}
+            <div class="carousel-item">
+                <img class="d-block w-100" src="${ top.project_art alt }" alt="slide">
+            </div>
+        {% endfor %}
 
 
-@app.route("/", methods=["GET", "POST"])
-def home():
+        <div class="carousel-item">
+            <img class="d-block w-100" src="" alt="Third slide">
+        </div>
+        <div class="carousel-item">
+            <img class="d-block w-100" src="" alt="fourth slide">
+        </div>
+    </div>
+    <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
+        <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+        <span class="sr-only">Previous</span>
+    </a>
+    <a class="carousel-control-next" href="#carouselExampleIndicators" role="button" data-slide="next">
+        <span class="carousel-control-next-icon" aria-hidden="true"></span>
+        <span class="sr-only">Next</span>
+    </a>
+</div>
+<h>Today's Top 100</h>
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <ol>
+                {% for top in tops %}
+                    <li>{{ top.title }} by {{ top.artist }}</li>
+                {% endfor %}
+            </ol>
+        </div>
+    </div>
+</div>
+<hr>
+<!--
+<h>New Music</h>
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <ol>
+                {% for album in new %}
+                    <li>{album.Title} by {album.Artist}</li>
+                {% endfor %}
+            </ol>
+        </div>
+    </div>
+</div>
+-->
 
-    tops = db.execute(
-        "SELECT DISTINCT fantano.title, fantano.artist FROM fantano JOIN metacritic ON fantano.title LIKE metacritic.title WHERE cast(fantano.rating AS Float) > 7.0 AND metacritic.CriticScore > 80 LIMIT 100")
-
-    # for album in albums:
-    #     quote = lookup(album["Title"])
-    #     album["Title"] = quote["Title"]
-    #     album["Artist"] = quote["Artist"]
-
-    # albums = db.execute("SELECT Title, Artist FROM fantano WHERE fantano.Rating > 8")
-
-    return render_template("home.html", tops=tops)
-
-# @app.route("/search", methods=["GET", "POST"])
-# def search():
-#     if request.method == "POST":
-#         name = request.form.get("name")
-#         artist = request.form.get("artist")
-#         year = request.form.get("year")
-#         db.execute("INSERT INTO albums (name, artist, year) VALUES(?, ?)", name, artist, year)
-#         return redirect("/")
-
-#     else:
-
-#         albums = db.execute("SELECT * FROM albums")
-#         return render_template("index.html", albums=albums)
-
-# @app.route("/myalbums")
-# @login_required
-# def myalbums():
-#     """Show history of transactions"""
-
-#     # store SQL line in a variable
-#     albums = db.execute(
-#         "SELECT * FROM transactions WHERE user_id = ?", session["user_id"])
-
-#     # make history.html
-#     return render_template("history.html", transactions=transactions)
+{% endblock %}
