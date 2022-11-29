@@ -6,6 +6,19 @@ from flask import redirect, render_template, request, session
 from functools import wraps
 
 
+url = "https://spotify23.p.rapidapi.com/albums/"
+
+querystring = {"ids":"3IBcauSj5M2A6lTeffJzdv"}
+
+headers = {
+	"X-RapidAPI-Key": "7e0c0fb8c7msh5f85dae3076c683p1845b4jsn512cc4e4e4fb",
+	"X-RapidAPI-Host": "spotify23.p.rapidapi.com"
+}
+
+response = requests.request("GET", url, headers=headers, params=querystring)
+
+
+
 def apology(message, code=400):
     """Render message as an apology to user."""
     def escape(s):
@@ -35,13 +48,13 @@ def login_required(f):
     return decorated_function
 
 
-def lookup(symbol):
-    """Look up quote for symbol."""
+def lookup(album):
+    """Look up quote for album."""
 
     # Contact API
     try:
         api_key = os.environ.get("API_KEY")
-        url = f"https://cloud.iexapis.com/stable/stock/{urllib.parse.quote_plus(symbol)}/quote?token={api_key}"
+        url = f"https://spotify23.p.rapidapi.com/albums/"
         response = requests.get(url)
         response.raise_for_status()
     except requests.RequestException:
@@ -51,14 +64,8 @@ def lookup(symbol):
     try:
         quote = response.json()
         return {
-            "name": quote["companyName"],
-            "price": float(quote["latestPrice"]),
-            "symbol": quote["symbol"]
+            "Title": quote["Title"],
+            "Artist": quote["Artist"],
         }
     except (KeyError, TypeError, ValueError):
         return None
-
-
-def usd(value):
-    """Format value as USD."""
-    return f"${value:,.2f}"
