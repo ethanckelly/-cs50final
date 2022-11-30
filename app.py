@@ -37,15 +37,9 @@ def after_request(response):
 @app.route("/", methods=["GET", "POST"])
 def home():
 
-    # ratingf = db.execute("SELECT title, artist, rating FROM fantano")
-    # ratingm = db.execute("SELECT title, artist, CriticScore FROM metacritic")
-
-    # newrating =
-
-    # for rating in ratingm:
-
     tops = db.execute(
-        "SELECT DISTINCT fantano.title, fantano.artist, fantano.project_art FROM fantano JOIN metacritic ON fantano.title LIKE metacritic.title WHERE cast(fantano.rating AS Float) > 7.0 AND metacritic.CriticScore > 80 LIMIT 100")
+        "SELECT DISTINCT fantano.title, fantano.artist, fantano.project_art, fantano.rating FROM fantano JOIN metacritic ON fantano.title LIKE metacritic.title ORDER BY ((cast(fantano.rating AS Float)*10) + cast(metacritic.CriticScore AS Float))/2.0 DESC LIMIT 100")
+
     covers = db.execute(
         "SELECT project_art FROM fantano"
     )
@@ -146,16 +140,62 @@ def account():
 @app.route("/search", methods=["GET", "POST"])
 def search():
     if request.method == "POST":
-        name = request.form.get("name")
-        artist = request.form.get("artist")
-        year = request.form.get("year")
-        db.execute("INSERT INTO albums (name, artist, year) VALUES(?, ?)", name, artist, year)
-        return redirect("/")
+        name = request.form.get("title")
+        albums = db.execute(
+            "SELECT title FROM metacritic WHERE title = ?", name)
 
     else:
+        albums = db.execute("SELECT title, artist FROM metacritic")
+    return render_template("search.html", albums=albums)
 
-        albums = db.execute("SELECT * FROM albums")
-        return render_template("index.html", albums=albums)
+
+@app.route("/login", methods=["GET", "POST"])
+def login():
+    """Log user in"""
+
+    # Forget any user_id
+    session.clear()
+
+    # User reached route via POST (as by submitting a form via POST)
+    if request.method == "POST":
+
+        # Ensure username was submitted
+        if not request.form.get("username"):
+            return apology("must provide username", 403)
+
+        # Ensure password was submitted
+        elif not request.form.get("password"):
+            return apology("must provide password", 403)
+
+        # Query database for username
+        rows = db.execute("SELECT * FROM users WHERE username = ?",
+                          request.form.get("username"))
+
+        # Ensure username exists and password is correct
+        if len(rows) != 1 or not check_password_hash(rows[0]["hash"], request.form.get("password")):
+            return apology("invalid username and/or password", 403)
+
+        # Remember which user has logged in
+        session["user_id"] = rows[0]["id"]
+
+        # Redirect user to home page
+        return redirect("/")
+
+    # User reached route via GET (as by clicking a link or via redirect)
+    else:
+        return render_template("login.html")
+
+
+@app.route("/logout")
+def logout():
+    """Log user out"""
+
+    # Forget any user_id
+    session.clear()
+
+    return redirect("/")
+
+
 
 # @app.route("/top")
 # def top():
