@@ -24,14 +24,16 @@ return Math.floor(Math.random()*101);
         </div>
         {% for cover in covers %}
         <script type="text/javascript">
-            const art = cover.project_art;
+            var art = "{{ cover.project_art }}";
+            console.log("works");
             //var art = 11;
             document.getElementById('output').innerHTML = art;
 
         </script>
-        <p id="output"></p>
+        <!-- <p id="output"></p> -->
+        <!-- <p>{{ number }}</p> -->
         <div class="carousel-item" id="">
-            <img class="d-block w-100" alt="slide">
+            <img class="d-block w-100" src="output" alt="slide">
         </div>
         {% endfor %}
 
