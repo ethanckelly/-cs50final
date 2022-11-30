@@ -1,0 +1,20 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Find an Album
+{% endblock %}
+
+{% block main %}
+    <form action="/search" method="post">
+        <div class="mb-3">
+            <select class="form-select mx-auto w-auto" name="title ">
+                <option disabled selected>Title</option>
+                {% for album in albums %}
+                    <option value="{{ album.title }}">{{ album.title }}</option>
+                {% endfor %}
+            </select>
+            </div>
+        </div>
+        <button class="btn btn-primary" type="submit">Go!</button>
+    </form>
+{% endblock %}
