@@ -42,54 +42,48 @@ def home():
     covers = db.execute(
         "SELECT project_art FROM fantano"
     )
-    # for album in albums:
-    #     quote = lookup(album["Title"])
-    #     album["Title"] = quote["Title"]
-    #     album["Artist"] = quote["Artist"]
-
-    # albums = db.execute("SELECT Title, Artist FROM fantano WHERE fantano.Rating > 8")
 
     return render_template("home.html", tops=tops, covers=covers)
 
-# @app.route("/register", methods=["GET", "POST"])
-# def register():
-#     """Register user"""
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    """Register user"""
 
-#     if request.method == "POST":
+    if request.method == "POST":
 
-#         # make sure username field is filled
-#         if not request.form.get("username"):
-#             return apology("must provide username", 400)
+        # make sure username field is filled
+        if not request.form.get("username"):
+            return apology("must provide username", 400)
 
-#         # make sure password field is filled
-#         elif not request.form.get("password"):
-#             return apology("must provide password", 400)
+        # make sure password field is filled
+        elif not request.form.get("password"):
+            return apology("must provide password", 400)
 
-#         # make sure the two passwords match
-#         elif request.form.get("password") != request.form.get("confirmation"):
-#             return apology("Passwords given don't match", 400)
+        # make sure the two passwords match
+        elif request.form.get("password") != request.form.get("confirmation"):
+            return apology("Passwords given don't match", 400)
 
-#         try:
-#             # get the new user id
-#             id = db.execute("INSERT INTO users (username, hash) VALUES(?, ?)", request.form.get(
-#                 "username"), generate_password_hash(request.form.get("password")))
+        try:
+            # get the new user id
+            id = db.execute("INSERT INTO users (username, hash) VALUES(?, ?)", request.form.get(
+                "username"), generate_password_hash(request.form.get("password")))
 
-#         # make sure username is unique
-#         except ValueError:
-#             return apology("Username is taken", 400)
+        # make sure username is unique
+        except ValueError:
+            return apology("Username is taken", 400)
 
-#         # get session id
-#         session["user_id"] = id
+        # get session id
+        session["user_id"] = id
 
-#         flash("Registered!")
+        flash("Registered!")
 
-#         # send to home page
-#         return redirect("/")
+        # send to home page
+        return redirect("/")
 
-#     else:
+    else:
 
-#         # make register.html
-#         return render_template("register.html")
+        # make register.html
+        return render_template("register.html")
 
 
 # @app.route("/search", methods=["GET", "POST"])
