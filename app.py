@@ -1,3 +1,4 @@
+
 import os
 import readline
 
@@ -7,7 +8,7 @@ from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from helpers import apology, login_required, lookup
+from helpers import apology, login_required, lookup, searched
 
 # Configure application
 app = Flask(__name__)
@@ -24,7 +25,7 @@ db = SQL("sqlite:///albums.db")
 # Make sure API key is set
 if not os.environ.get("API_KEY"):
     raise RuntimeError("API_KEY not set")
-    
+
 
 @app.after_request
 def after_request(response):
@@ -149,11 +150,16 @@ def search():
         if not request.form.get("query"):
             return apology("value not inputted", 403)
 
-        name = request.form.get("title").lower()
-        albums = db.execute(
-            "SELECT title FROM metacritic WHERE title = ?", name)
+        name = request.form.get("query")
+        print(name)
+        return searched(name)
     else:
-        return render_template("search.html", albums=albums)
+        return render_template("search.html")
+
+
+@app.route("/results", methods=["GET", "POST"])
+def results():
+    return render_template("results.html")
 
 
 @app.route("/login", methods=["GET", "POST"])
