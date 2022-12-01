@@ -2,10 +2,11 @@ import os
 import requests
 import urllib.parse
 
+from cs50 import SQL
 from flask import redirect, render_template, request, session
 from functools import wraps
 
-
+db = SQL("sqlite:///albums.db")
 url = "https://spotify23.p.rapidapi.com/albums/"
 
 querystring = {"ids":"3IBcauSj5M2A6lTeffJzdv"}
@@ -24,7 +25,6 @@ def apology(message, code=400):
     def escape(s):
         """
         Escape special characters.
-
         https://github.com/jacebrowning/memegen#special-characters
         """
         for old, new in [("-", "--"), (" ", "-"), ("_", "__"), ("?", "~q"),
@@ -34,10 +34,15 @@ def apology(message, code=400):
     return render_template("apology.html", top=code, bottom=escape(message)), code
 
 
+def searched(name):
+    results = db.execute(
+            "SELECT title,artist FROM metacritic WHERE title LIKE ?", '%'+name+'%')
+    return render_template("results.html", results=results)
+
+
 def login_required(f):
     """
     Decorate routes to require login.
-
     https://flask.palletsprojects.com/en/1.1.x/patterns/viewdecorators/
     """
     @wraps(f)
