@@ -1,20 +1,26 @@
 {% extends "layout.html" %}
 
 {% block title %}
-    Find an Album
+Find an Album
 {% endblock %}
 
 {% block main %}
-    <form action="/search" method="post">
-        <div class="mb-3">
-            <select class="form-select mx-auto w-auto" name="title ">
-                <option disabled selected>Title</option>
-                {% for album in albums %}
-                    <option value="{{ album.title }}">{{ album.title }}</option>
+<form action="/search" method="post">
+    <div class="mb-3">
+            <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="query" name="query" placeholder="Search..." aria-label="Search through site content">
+    </div>
+    <button class="btn btn-primary" type="submit">Go!</button>
+</form>
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <ol>
+                {% for result in results %}
+                <li>{{ results.title }} by {{ results.artist }}</li>
                 {% endfor %}
-            </select>
-            </div>
+            </ol>
         </div>
-        <button class="btn btn-primary" type="submit">Go!</button>
-    </form>
+    </div>
+</div>
+<hr>
 {% endblock %}
