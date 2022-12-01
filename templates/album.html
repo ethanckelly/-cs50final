@@ -5,14 +5,33 @@ Album
 {% endblock %}
 
 {% block main %}
+
+<h1 id="title"></h1>
+<h id="artist"></h>
+<div class="row d-flex justify-content-center">
+    <div class="col-md-4">
+        <img class="d-block w-100" id="cover" alt="Album Cover">
+    </div>
+</div>
 <form action="/album" method="post">
     <div class="mb-3">
-        <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="symbol" placeholder="Symbol" type="text">
+        <input autocomplete="off" class="form-control mx-auto w-auto" name="rating" placeholder="Your Rating"
+            type="number">
     </div>
     <div class="mb-3">
-        <input autocomplete="off" class="form-control mx-auto w-auto" name="review" placeholder="Your Review" type="text">
+        <input autocomplete="off" class="form-control mx-auto w-auto" name="review" placeholder="Your Review"
+            type="text">
     </div>
     <button class="btn btn-primary" type="submit">Submit</button>
 </form>
-
+<script type="text/javascript">
+    const queryString = window.location.search;
+    const urlParams = new URLSearchParams(queryString);
+    const title = urlParams.get('title');
+    const artist = urlParams.get('artist');
+    const cover = urlParams.get('cover');
+    document.getElementById('title').innerHTML = title;
+    document.getElementById("artist").innerHTML = artist;
+    document.getElementById("cover").src = cover;
+</script>
 {% endblock %}
