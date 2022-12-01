@@ -9,13 +9,12 @@ Peanut Gallery
     <div class="col-md-4">
         <!-- Slideshow -->
         <!-- adapted from bootstrap: https://getbootstrap.com/docs/4.5/components/carousel/ -->
-        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
+        <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" data-interval="10000">
             <div class="carousel-item active">
                 <img class="d-block w-100" id="output"
                     src="https://i.scdn.co/image/ab67616d00004851d9194aa18fa4c9362b47464f" alt="slide">
             </div>
             <div class="carousel-inner">
-
                 {% for cover in covers %}
                 <p id="test"></p>
                 <div class="carousel-item" id="slide{{ loop.index }}">
