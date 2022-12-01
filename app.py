@@ -1,4 +1,5 @@
 import os
+import readline
 
 from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session
@@ -23,7 +24,7 @@ db = SQL("sqlite:///albums.db")
 # Make sure API key is set
 if not os.environ.get("API_KEY"):
     raise RuntimeError("API_KEY not set")
-
+    
 
 @app.after_request
 def after_request(response):
@@ -140,13 +141,14 @@ def account():
 @app.route("/search", methods=["GET", "POST"])
 def search():
     if request.method == "POST":
-        name = request.form.get("title")
+        if not request.form.get("query"):
+            return apology("value not inputted", 403)
+
+        name = request.form.get("title").lower()
         albums = db.execute(
             "SELECT title FROM metacritic WHERE title = ?", name)
-
     else:
-        albums = db.execute("SELECT title, artist FROM metacritic")
-    return render_template("search.html", albums=albums)
+        return render_template("search.html", albums=albums)
 
 
 @app.route("/login", methods=["GET", "POST"])
@@ -194,7 +196,6 @@ def logout():
     session.clear()
 
     return redirect("/")
-
 
 
 # @app.route("/top")
