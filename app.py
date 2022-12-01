@@ -48,6 +48,11 @@ def home():
     return render_template("home.html", tops=tops, covers=covers)
 
 
+@app.route("/album", methods=["GET", "POST"])
+def album():
+    return render_template("album.html")
+
+
 @app.route("/register", methods=["GET", "POST"])
 def register():
     """Register user"""
