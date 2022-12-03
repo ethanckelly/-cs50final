@@ -1,4 +1,3 @@
-
 import os
 import readline
 
@@ -43,7 +42,7 @@ def home():
         "SELECT DISTINCT fantano.title, fantano.artist, fantano.project_art, fantano.rating FROM fantano JOIN metacritic ON fantano.title LIKE metacritic.title ORDER BY ((cast(fantano.rating AS Float)*10) + cast(metacritic.CriticScore AS Float))/2.0 DESC LIMIT 100")
 
     covers = db.execute(
-        "SELECT project_art FROM fantano"
+        "SELECT project_art FROM fantano LIMIT 50"
     )
 
     return render_template("home.html", tops=tops, covers=covers)
@@ -51,7 +50,24 @@ def home():
 
 @app.route("/album", methods=["GET", "POST"])
 def album():
-    return render_template("album.html")
+    if request.method == "POST":
+        if not request.form.get("atitle"):
+            return apology("must provide an album title", 400)
+        elif not request.form.get("aartist"):
+            return apology("must provide an artist", 400)
+        elif not request.form.get("rating"):
+            return apology("must provide rating", 400)
+        # try:
+        db.execute("INSERT INTO reviews (album, artist, userid, review, rating) VALUES(?, ?, ?, ?, ?)", request.form.get(
+            "atitle"), request.form.get("aartist"), session["user_id"], request.form.get("review"), request.form.get("rating"))
+        # except ValueError:
+        #     return apology("Already reviewed.", 400)
+
+        flash("Review Submitted!")
+
+        return redirect("/")
+    else:
+        return render_template("album.html")
 
 
 @app.route("/register", methods=["GET", "POST"])
@@ -64,6 +80,9 @@ def register():
         if not request.form.get("username"):
             return apology("must provide username", 400)
 
+        elif not request.form.get("displayname"):
+            return apology("music provide display name", 400)
+
         # make sure password field is filled
         elif not request.form.get("password"):
             return apology("must provide password", 400)
@@ -74,8 +93,8 @@ def register():
 
         try:
             # get the new user id
-            id = db.execute("INSERT INTO users (username, hash) VALUES(?, ?)", request.form.get(
-                "username"), generate_password_hash(request.form.get("password")))
+            id = db.execute("INSERT INTO users (username, displayname, hash) VALUES(?, ?, ?)", request.form.get(
+                "username"), request.form.get("displayname"), generate_password_hash(request.form.get("password")))
 
         # make sure username is unique
         except ValueError:
