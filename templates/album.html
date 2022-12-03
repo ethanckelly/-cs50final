@@ -6,6 +6,7 @@ Album
 
 {% block main %}
 
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <h1 id="title"></h1>
 <h id="artist"></h>
 <div class="row d-flex justify-content-center">
@@ -13,14 +14,25 @@ Album
         <img class="d-block w-100" id="cover" alt="Album Cover">
     </div>
 </div>
+<p></p>
+<h5>Rate and review this album!</h5>
+<p> Rating must be a whole number from 0 to 5</p>
 <form action="/album" method="post">
     <div class="mb-3">
-        <input autocomplete="off" class="form-control mx-auto w-auto" name="rating" placeholder="Your Rating"
+        <input autocomplete="off" class="form-control mx-auto w-auto" id="atitle" name="atitle" placeholder="Title"
+            type="text">
+    </div>
+    <div class="mb-3">
+        <input autocomplete="off" class="form-control mx-auto w-auto" id="aartist" name="aartist" placeholder="Artist"
+            type="text">
+    </div>
+    <div class="mb-3">
+        <input autocomplete="off" class="form-control mx-auto w-auto" id="rating" name="rating" placeholder="Your Rating"
             type="number">
     </div>
     <div class="mb-3">
-        <input autocomplete="off" class="form-control mx-auto w-auto" name="review" placeholder="Your Review"
-            type="text">
+        <textarea autocomplete="off" class="form-control mx-auto w-auto" id="review" name="review" placeholder="Write your review here!"
+            type="text"></textarea><br>
     </div>
     <button class="btn btn-primary" type="submit">Submit</button>
 </form>
