@@ -10,14 +10,10 @@ Peanut Gallery
         <!-- Slideshow -->
         <!-- adapted from bootstrap: https://getbootstrap.com/docs/4.5/components/carousel/ -->
         <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" data-interval="10000">
-            <div class="carousel-item active">
-                <img class="d-block w-100" id="output"
-                    src="https://i.scdn.co/image/ab67616d00004851d9194aa18fa4c9362b47464f" alt="slide">
-            </div>
             <div class="carousel-inner">
                 {% for cover in covers %}
                 <p id="test"></p>
-                <div class="carousel-item" id="slide{{ loop.index }}">
+                <div class="carousel-item {% if loop.index==1 %} active {% endif %}" id="slide{{ loop.index }}">
                     <img class="d-block w-100" id="output" src="{{ cover.project_art }}" alt="slide{{ loop.index }}">
                 </div>
                 {% endfor %}
@@ -41,8 +37,7 @@ Peanut Gallery
             <ol>
                 {% for top in tops %}
                 <li>
-                    {{ top.title }} by {{ top.artist }}
-                    <a href="/album?title={{ top.title }}&artist={{ top.artist }}&cover={{ top.project_art }}">link</a>
+                    <a href="/album?title={{ top.title }}&artist={{ top.artist }}&cover={{ top.project_art }}">{{ top.title }} by {{ top.artist }}</a>
                 </li>
                 {% endfor %}
             </ol>
@@ -50,19 +45,5 @@ Peanut Gallery
     </div>
 </div>
 <hr>
-<!--
-<h>New Music</h>
-<div class="container">
-    <div class="row">
-        <div class="col-md-4">
-            <ol>
-                {% for album in new %}
-                    <li>{album.Title} by {album.Artist}</li>
-                {% endfor %}
-            </ol>
-        </div>
-    </div>
-</div>
--->
 
 {% endblock %}
