@@ -33,13 +33,13 @@ def searched(name):
         "SELECT title,artist FROM metacritic WHERE title LIKE ?", '%'+name+'%')
     # query for the reviews related to the album
     reviews = db.execute(
-        "SELECT metacritic.title,metacritic.artist,fantano.project_art,reviews.review,reviews.rating "
+        "SELECT metacritic.title,metacritic.artist,fantano.project_art,reviews.review,reviews.rating,reviews.displayname "
         "FROM metacritic LEFT JOIN fantano ON metacritic.title LIKE fantano.title "
-        "LEFT JOIN reviews ON metacritic.title LIKE reviews.album WHERE metacritic.title LIKE ? "
+        "LEFT JOIN reviews ON metacritic.title LIKE reviews.album AND metacritic.artist LIKE reviews.artist WHERE metacritic.title LIKE ? "
         "UNION "
-        "SELECT metacritic.title,metacritic.artist,fantano.project_art,reviews.review,reviews.rating "
-        "FROM reviews LEFT JOIN metacritic ON metacritic.title LIKE reviews.album "
-        "LEFT JOIN fantano ON metacritic.title LIKE fantano.title WHERE metacritic.title LIKE ?", '%'+name+'%', '%'+name+'%')
+        "SELECT metacritic.title,metacritic.artist,fantano.project_art,reviews.review,reviews.rating,reviews.displayname "
+        "FROM reviews LEFT JOIN metacritic ON metacritic.title LIKE reviews.album AND metacritic.artist LIKE reviews.artist "
+        "LEFT JOIN fantano ON metacritic.title LIKE fantano.title WHERE metacritic.title LIKE ? ", '%'+name+'%', '%'+name+'%')
     # pass everything to results
     return render_template("results.html", results=results, reviews=reviews)
 
