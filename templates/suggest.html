@@ -1,0 +1,57 @@
+{% extends "layout.html" %}
+
+{% block title %}
+    Suggest an Album!
+{% endblock %}
+
+{% block main %}
+
+    <!-- creating a form with all attributes to suggest a new album -->
+    <form action="/suggest" method="post">
+        <div class="mb-3">
+            <input autocomplete="off" class="form-control mx-auto w-auto" id="aartist" name="aartist" placeholder="Artist*"
+                type="text">
+        </div>
+        <div class="mb-3">
+            <input autocomplete="off" class="form-control mx-auto w-auto" id="atitle" name="atitle" placeholder="Title*"
+                type="text">
+        </div>
+        <div class="mb-3">
+            <input autocomplete="off" class="form-control mx-auto w-auto" id="rating" name="rating"
+                placeholder="Your Rating*" type="number">
+        </div>
+        <div class="mb-3">
+            <input autocomplete="off" class="form-control mx-auto w-auto" id="spid" name="spid" placeholder="Spotify ID"
+                type="text">
+        </div>
+        <div class="mb-3">
+            <input autocomplete="off" class="form-control mx-auto w-auto" id="projecttype" name="projecttype" placeholder="Project Type - EP/Album"
+                type="text">
+        </div>
+        <div class="mb-3">
+            <input autocomplete="off" class="form-control mx-auto w-auto" id="numtrack" name="numtrack" placeholder="Number of Tracks"
+                type="number">
+        </div>
+        <div class="mb-3">
+            <input autocomplete="off" class="form-control mx-auto w-auto" id="projectart" name="projectart" placeholder="Link to Project Art"
+                type="text">
+        </div>
+        <div class="mb-3">
+            <input autocomplete="off" class="form-control mx-auto w-auto" id="year" name="year" placeholder="Release Year"
+                type="number">
+        </div>
+        <div class="mb-3">
+            <input autocomplete="off" class="form-control mx-auto w-auto" id="genre" name="genre" placeholder="Genre"
+                type="text">
+        </div>
+        <div class="mb-3">
+            <input autocomplete="off" class="form-control mx-auto w-auto" id="label" name="label" placeholder="Label"
+                type="text">
+        </div>
+        <div class="mb-3">
+            <textarea autocomplete="off" class="form-control mx-auto w-auto" id="review" name="review"
+                placeholder="Write your review here!" type="text"></textarea><br>
+        </div>
+        <button class="btn btn-primary" type="submit">Submit</button>
+    </form>
+{% endblock %}
