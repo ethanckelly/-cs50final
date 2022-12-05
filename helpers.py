@@ -36,8 +36,16 @@ def apology(message, code=400):
 
 def searched(name):
     results = db.execute(
-            "SELECT title,artist FROM metacritic WHERE title LIKE ?", '%'+name+'%')
-    return render_template("results.html", results=results)
+        "SELECT title,artist FROM metacritic WHERE title LIKE ?", '%'+name+'%')
+    reviews = db.execute(
+        "SELECT metacritic.title,metacritic.artist,fantano.project_art,reviews.review,reviews.rating "
+        "FROM metacritic LEFT JOIN fantano ON metacritic.title LIKE fantano.title "
+        "LEFT JOIN reviews ON metacritic.title LIKE reviews.album WHERE metacritic.title LIKE ? "
+        "UNION "
+        "SELECT metacritic.title,metacritic.artist,fantano.project_art,reviews.review,reviews.rating "
+        "FROM reviews LEFT JOIN metacritic ON metacritic.title LIKE reviews.album "
+        "LEFT JOIN fantano ON metacritic.title LIKE fantano.title WHERE metacritic.title LIKE ?", '%'+name+'%', '%'+name+'%')
+    return render_template("results.html", results=results, reviews=reviews)
 
 
 def login_required(f):
