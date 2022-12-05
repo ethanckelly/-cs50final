@@ -33,22 +33,6 @@ def after_request(response):
     return response
 
 
-# creating the homepage
-@app.route("/", methods=["GET", "POST"])
-def home():
-
-    # query the database to find the top rated albums in our dataset (had to standardize a rating system across metacritic and fantano)
-    tops = db.execute(
-        "SELECT DISTINCT fantano.title, fantano.artist, fantano.project_art, fantano.rating FROM fantano JOIN metacritic ON fantano.title LIKE metacritic.title ORDER BY ((cast(fantano.rating AS Float)*10) + cast(metacritic.CriticScore AS Float))/2.0 DESC LIMIT 100")
-
-    # query the database for all the links to project art from the fantano table
-    covers = db.execute(
-        "SELECT project_art FROM fantano LIMIT 50")
-
-    # render the home.html template and return tops and covers
-    return render_template("home.html", tops=tops, covers=covers)
-
-
 @app.route("/", methods=["GET", "POST"])
 def home():
     
