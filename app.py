@@ -123,6 +123,34 @@ def album():
     else:
         return render_template("album.html")
 
+    
+@app.route("/suggest", methods=["GET", "POST"])
+@login_required
+def suggest():
+    # necessary form inputs are all there
+    if request.method == "POST":
+        if not request.form.get("atitle"):
+            return apology("must provide an album title", 400)
+        elif not request.form.get("aartist"):
+            return apology("must provide an artist", 400)
+        elif not request.form.get("rating"):
+            return apology("must provide rating", 400)
+
+        #insert their review in reviews and their suggested album into both needed tables
+        db.execute("INSERT INTO reviews (album, artist, userid, review, rating) VALUES(?, ?, ?, ?, ?)", request.form.get(
+            "atitle"), request.form.get("aartist"), session["user_id"], request.form.get("review"), request.form.get("rating"))
+        db.execute("INSERT INTO metacritic (artist, title, year, format, label, genre) VALUES(?, ?, ?, ?, ?, ?)", request.form.get(
+            "aartist"), request.form.get("atitle"), request.form.get("year"), request.form.get("projecttype"), request.form.get("label"),
+            request.form.get("genre"))
+        db.execute("INSERT INTO fantano (spotify_id, title, artist, project_type, tracks, project_art, year VALUES(?, ?, ?, ?, ?, ?, ?)", request.form.get("spid"),
+            request.form.get("atitle"), request.form.get("aartist"), request.form.get("projecttype"), request.form.get("numtrack"), request.form.get("project_art"),
+            request.form.get("year"))
+
+        flash("Review Submitted!")
+
+        return redirect("/")
+    else:
+        return render_template("suggest.html")
 
 # creates a page to register a user on our website
 @app.route("/register", methods=["GET", "POST"])
