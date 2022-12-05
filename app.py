@@ -33,6 +33,22 @@ def after_request(response):
     return response
 
 
+# creating the homepage
+@app.route("/", methods=["GET", "POST"])
+def home():
+
+    # query the database to find the top rated albums in our dataset (had to standardize a rating system across metacritic and fantano)
+    tops = db.execute(
+        "SELECT DISTINCT fantano.title, fantano.artist, fantano.project_art, fantano.rating FROM fantano JOIN metacritic ON fantano.title LIKE metacritic.title ORDER BY ((cast(fantano.rating AS Float)*10) + cast(metacritic.CriticScore AS Float))/2.0 DESC LIMIT 100")
+
+    # query the database for all the links to project art from the fantano table
+    covers = db.execute(
+        "SELECT project_art FROM fantano LIMIT 50")
+
+    # render the home.html template and return tops and covers
+    return render_template("home.html", tops=tops, covers=covers)
+
+
 @app.route("/", methods=["GET", "POST"])
 def home():
     
@@ -53,7 +69,7 @@ def home():
 @app.route("/top", methods=["GET"])
 def top():
 
-    # query the database to find the top rated albums in our dataset (had to standardize a rating system across metacritic and fantano)
+    # query the database to find the top rated albums in our dataset for each genre (had to standardize a rating system across metacritic and fantano)
     hiphops = db.execute(
         "SELECT DISTINCT fantano.title, fantano.artist, fantano.project_art, metacritic.genre, ((cast(fantano.rating AS Float)*10) + cast(metacritic.CriticScore AS Float))/2.0 AS score FROM fantano JOIN metacritic ON fantano.title LIKE metacritic.title WHERE metacritic.genre = 'Hip Hop' ORDER BY ((cast(fantano.rating AS Float)*10) + cast(metacritic.CriticScore AS Float))/2.0 DESC LIMIT 10")
 
@@ -105,7 +121,8 @@ def album():
         # check if rating was submitted
         elif not request.form.get("rating"):
             return apology("must provide rating", 400)
-
+        
+        # check if display name was submitted
         elif not request.form.get("dname"):
             return apology("must provide display name", 400)
 
@@ -129,10 +146,16 @@ def album():
 def suggest():
     # necessary form inputs are all there
     if request.method == "POST":
+        
+        # check if album title was submitted
         if not request.form.get("atitle"):
             return apology("must provide an album title", 400)
+        
+        # check if artist was submitted
         elif not request.form.get("aartist"):
             return apology("must provide an artist", 400)
+        
+        # check if rating was submitted
         elif not request.form.get("rating"):
             return apology("must provide rating", 400)
 
@@ -147,9 +170,11 @@ def suggest():
             request.form.get("year"))
 
         flash("Review Submitted!")
-
+        
+        # redirect to home
         return redirect("/")
     else:
+        # render suggest
         return render_template("suggest.html")
 
 # creates a page to register a user on our website
