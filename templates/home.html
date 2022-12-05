@@ -11,6 +11,8 @@ Peanut Gallery
         <!-- adapted from bootstrap: https://getbootstrap.com/docs/4.5/components/carousel/ -->
         <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel" data-interval="10000">
             <div class="carousel-inner">
+
+                <!-- looping through the covers and loading them into our carousel - works with any database with these headers -->
                 {% for cover in covers %}
                 <p id="test"></p>
                 <div class="carousel-item {% if loop.index==1 %} active {% endif %}" id="slide{{ loop.index }}">
@@ -19,6 +21,8 @@ Peanut Gallery
                 {% endfor %}
             </div>
         </div>
+
+        <!-- carousel buttons -->
         <a class="carousel-control-prev" href="#carouselExampleIndicators" role="button" data-slide="prev">
             <span class="carousel-control-prev-icon" aria-hidden="true"></span>
             <span class="sr-only">Previous</span>
@@ -30,11 +34,14 @@ Peanut Gallery
     </div>
 </div>
 </div>
+<hr>
+<!-- top 100 list -->
 <h>Today's Top 100</h>
 <div class="container">
     <div class="row">
         <div class="col-md-4">
             <ol>
+                <!-- looping through using passed table - works with continually updating lists like top 100 -->
                 {% for top in tops %}
                 <li>
                     <a href="/album?title={{ top.title }}&artist={{ top.artist }}&cover={{ top.project_art }}">{{ top.title }} by {{ top.artist }}</a>
