@@ -1,0 +1,210 @@
+{% extends "layout.html" %}
+
+{% block title %}
+Top Albums
+{% endblock %}
+
+{% block main %}
+<h1>Top 10 Albums</h1>
+<hr>
+<h2>Hip Hop</h2>
+<table style="width:800px" align="center">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Artist</th>
+            <th>Peanut Score</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for hiphop in hiphops %}
+        <tr>
+            <td>{{ hiphop.title }}</td>
+            <td>{{ hiphop.artist }}</td>
+            <td>{{ hiphop.score }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<hr>
+<h2>Indie Rock</h2>
+<table style="width:800px" align="center">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Artist</th>
+            <th>Peanut Score</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for indierock in indierocks %}
+        <tr>
+            <td>{{ indierock.title }}</td>
+            <td>{{ indierock.artist }}</td>
+            <td>{{ indierock.score }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<hr>
+<h2>Indie Pop</h2>
+<table style="width:800px" align="center">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Artist</th>
+            <th>Peanut Score</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for indiepop in indiepops %}
+        <tr>
+            <td>{{ indiepop.title }}</td>
+            <td>{{ indiepop.artist }}</td>
+            <td>{{ indiepop.score }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<hr>
+<h2>Alt Rock</h2>
+<table style="width:800px" align="center">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Artist</th>
+            <th>Peanut Score</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for altrock in altrocks %}
+        <tr>
+            <td>{{ altrock.title }}</td>
+            <td>{{ altrock.artist }}</td>
+            <td>{{ altrock.score }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<hr>
+<h2>Singer-Songwriter</h2>
+<table style="width:800px" align="center">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Artist</th>
+            <th>Peanut Score</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for ss in sss %}
+        <tr>
+            <td>{{ ss.title }}</td>
+            <td>{{ ss.artist }}</td>
+            <td>{{ ss.score }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<hr>
+<h2>Pop Rock</h2>
+<table style="width:800px" align="center">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Artist</th>
+            <th>Peanut Score</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for poprock in poprocks %}
+        <tr>
+            <td>{{ poprock.title }}</td>
+            <td>{{ poprock.artist }}</td>
+            <td>{{ poprock.score }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<hr>
+<h2>Electronic</h2>
+<table style="width:800px" align="center">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Artist</th>
+            <th>Peanut Score</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for electronic in electronics %}
+        <tr>
+            <td>{{ electronic.title }}</td>
+            <td>{{ electronic.artist }}</td>
+            <td>{{ electronic.score }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<hr>
+<h2>Folk</h2>
+<table style="width:800px" align="center">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Artist</th>
+            <th>Peanut Score</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for folk in folks %}
+        <tr>
+            <td>{{ folk.title }}</td>
+            <td>{{ folk.artist }}</td>
+            <td>{{ folk.score }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<hr>
+<h2>Pop</h2>
+<table style="width:800px" align="center">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Artist</th>
+            <th>Peanut Score</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for pop in pops %}
+        <tr>
+            <td>{{ pop.title }}</td>
+            <td>{{ pop.artist }}</td>
+            <td>{{ pop.score }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<hr>
+<h2>R&B</h2>
+<table style="width:800px" align="center">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Artist</th>
+            <th>Peanut Score</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for rnb in rnbs %}
+        <tr>
+            <td>{{ rnb.title }}</td>
+            <td>{{ rnb.artist }}</td>
+            <td>{{ rnb.score }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+<hr>
+{% endblock %}
