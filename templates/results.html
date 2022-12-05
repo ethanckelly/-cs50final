@@ -9,22 +9,21 @@ Find an Album
     <div class="row">
         <div class="col-md-4">
             <ol>
+                <!-- display all the results for the search -->
                 {% for result in results %}
                 <li>
-
-                    <a href="/album?title={{ result.title }}&artist={{ result.artist }}&cover={{ result.project_art }}">{{
-                        result.title }} by {{ result.artist }}</a>
+                    <!-- use the url to pass the variables for each of the result to album if it is clicked -->
+                    <a href="/album?title={{ result.title }}&artist={{ result.artist }}&cover={{ result.project_art }}">
+                        {{ result.title }} by {{ result.artist }}
+                    </a>
                 </li>
-                <script>
-                    console.log("hello")
-                    console.log(result)
-                </script>
                 {% endfor %}
             </ol>
         </div>
     </div>
 </div>
 <hr>
+<!-- making a table with all of the reviews from albums that match the search -->
 <table style="width:800px" align="center">
     <thead>
         <tr>
