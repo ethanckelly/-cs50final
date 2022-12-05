@@ -29,8 +29,9 @@ Find an Album
         <tr>
             <th>Title</th>
             <th>Artist</th>
-            <th>Review</th>
-            <th>Rating</th>
+            <th>User</th>
+            <th>User Review</th>
+            <th>User Rating</th>
         </tr>
     </thead>
     <tbody>
@@ -38,6 +39,7 @@ Find an Album
         <tr>
             <td>{{ review.title }}</td>
             <td>{{ review.artist }}</td>
+            <td>{{ review.displayname }}</td>
             <td>{{ review.review }}</td>
             <td>{{ review.rating }}</td>
         </tr>
