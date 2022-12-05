@@ -5,22 +5,12 @@ Find an Album
 {% endblock %}
 
 {% block main %}
+<!-- form for searches -->
 <form action="/search" method="post">
     <div class="mb-3">
             <input autocomplete="off" autofocus class="form-control mx-auto w-auto" id="query" name="query" placeholder="Search..." aria-label="Search through site content">
     </div>
-    <button class="btn btn-primary" type="submit">Go!</button>
+    <button class="btn btn-primary" type="submit" onclick="window.location.reload()">Go!</button>
+
 </form>
-<div class="container">
-    <div class="row">
-        <div class="col-md-4">
-            <ol>
-                {% for result in results %}
-                <li>{{ results.title }} by {{ results.artist }}</li>
-                {% endfor %}
-            </ol>
-        </div>
-    </div>
-</div>
-<hr>
 {% endblock %}
