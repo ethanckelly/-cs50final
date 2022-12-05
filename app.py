@@ -33,9 +33,10 @@ def after_request(response):
     return response
 
 
+# creating the homepage
 @app.route("/", methods=["GET", "POST"])
 def home():
-    
+
     # query the database to find the top rated albums in our dataset (had to standardize a rating system across metacritic and fantano)
     tops = db.execute(
         "SELECT DISTINCT fantano.title, fantano.artist, fantano.project_art, (((cast(fantano.rating AS Float)*10) + cast(metacritic.CriticScore AS Float))/2.0) as score FROM fantano JOIN metacritic ON fantano.title LIKE metacritic.title ORDER BY score DESC LIMIT 100")
@@ -105,7 +106,7 @@ def album():
         # check if rating was submitted
         elif not request.form.get("rating"):
             return apology("must provide rating", 400)
-        
+
         # check if display name was submitted
         elif not request.form.get("dname"):
             return apology("must provide display name", 400)
@@ -124,37 +125,47 @@ def album():
     else:
         return render_template("album.html")
 
-    
+
 @app.route("/suggest", methods=["GET", "POST"])
 @login_required
 def suggest():
     # necessary form inputs are all there
     if request.method == "POST":
-        
+
         # check if album title was submitted
         if not request.form.get("atitle"):
             return apology("must provide an album title", 400)
-        
+
         # check if artist was submitted
         elif not request.form.get("aartist"):
             return apology("must provide an artist", 400)
-        
+
         # check if rating was submitted
         elif not request.form.get("rating"):
             return apology("must provide rating", 400)
 
+        # check if project art was submitted
+        elif not request.form.get("projectart"):
+            return apology("must provide link to project art", 400)
+
+        # check if display name was submitted
+        elif not request.form.get("displayname"):
+            return apology("must provide display name", 400)
+
         #insert their review in reviews and their suggested album into both needed tables
-        db.execute("INSERT INTO reviews (album, artist, userid, review, rating) VALUES(?, ?, ?, ?, ?)", request.form.get(
-            "atitle"), request.form.get("aartist"), session["user_id"], request.form.get("review"), request.form.get("rating"))
+        db.execute("INSERT INTO reviews (album, artist, userid, displayname, review, rating) VALUES(?, ?, ?, ?, ?, ?)", request.form.get(
+            "atitle"), request.form.get("aartist"), session["user_id"], request.form.get("displayname"), request.form.get("review"), request.form.get("rating"))
+        print("1")
         db.execute("INSERT INTO metacritic (artist, title, year, format, label, genre) VALUES(?, ?, ?, ?, ?, ?)", request.form.get(
             "aartist"), request.form.get("atitle"), request.form.get("year"), request.form.get("projecttype"), request.form.get("label"),
             request.form.get("genre"))
-        db.execute("INSERT INTO fantano (spotify_id, title, artist, project_type, tracks, project_art, year VALUES(?, ?, ?, ?, ?, ?, ?)", request.form.get("spid"),
+        print("2")
+        db.execute("INSERT INTO fantano (spotify_id, title, artist, project_type, tracks, project_art, year) VALUES(?, ?, ?, ?, ?, ?, ?)", request.form.get("spid"),
             request.form.get("atitle"), request.form.get("aartist"), request.form.get("projecttype"), request.form.get("numtrack"), request.form.get("project_art"),
             request.form.get("year"))
-
+        print("3")
         flash("Review Submitted!")
-        
+
         # redirect to home
         return redirect("/")
     else:
