@@ -1,5 +1,5 @@
+# importing all of the libraries we need
 import os
-import readline
 
 from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session
@@ -7,7 +7,8 @@ from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
 
-from helpers import apology, login_required, lookup, searched
+# importing relevant functions from helpers.py
+from helpers import apology, login_required, searched
 
 # Configure application
 app = Flask(__name__)
@@ -22,6 +23,7 @@ Session(app)
 db = SQL("sqlite:///albums.db")
 
 
+# make sure responses aren't cached
 @app.after_request
 def after_request(response):
     """Ensure responses aren't cached"""
@@ -31,41 +33,56 @@ def after_request(response):
     return response
 
 
+# creating the homepage
 @app.route("/", methods=["GET", "POST"])
 def home():
 
+    # query the database to find the top rated albums in our dataset (had to standardize a rating system across metacritic and fantano)
     tops = db.execute(
         "SELECT DISTINCT fantano.title, fantano.artist, fantano.project_art, fantano.rating FROM fantano JOIN metacritic ON fantano.title LIKE metacritic.title ORDER BY ((cast(fantano.rating AS Float)*10) + cast(metacritic.CriticScore AS Float))/2.0 DESC LIMIT 100")
 
+    # query the database for all the links to project art from the fantano table
     covers = db.execute(
-        "SELECT project_art FROM fantano LIMIT 50"
-    )
+        "SELECT project_art FROM fantano LIMIT 50")
 
+    # render the home.html template and return tops and covers
     return render_template("home.html", tops=tops, covers=covers)
 
 
+# creates our album page: displays a specific album with it's album art if it exists and it's title and artist. also allows users to review the album
 @app.route("/album", methods=["GET", "POST"])
 def album():
+
     if request.method == "POST":
+
+        # check if album title was submitted
         if not request.form.get("atitle"):
             return apology("must provide an album title", 400)
+
+        # check if artist was submitted
         elif not request.form.get("aartist"):
             return apology("must provide an artist", 400)
+
+        # check if rating was submitted
         elif not request.form.get("rating"):
             return apology("must provide rating", 400)
-        # try:
+
+        # insert a new row into the reviews table with the relevant review
         db.execute("INSERT INTO reviews (album, artist, userid, review, rating) VALUES(?, ?, ?, ?, ?)", request.form.get(
             "atitle"), request.form.get("aartist"), session["user_id"], request.form.get("review"), request.form.get("rating"))
-        # except ValueError:
-        #     return apology("Already reviewed.", 400)
 
+        # flash a notice that the review was submitted
         flash("Review Submitted!")
 
+        # redirect to homepage
         return redirect("/")
+
+    # render the album.html template
     else:
         return render_template("album.html")
 
 
+# creates a page to register a user on our website
 @app.route("/register", methods=["GET", "POST"])
 def register():
     """Register user"""
@@ -76,6 +93,7 @@ def register():
         if not request.form.get("username"):
             return apology("must provide username", 400)
 
+        # make sure display name field is filled
         elif not request.form.get("displayname"):
             return apology("music provide display name", 400)
 
@@ -99,17 +117,19 @@ def register():
         # get session id
         session["user_id"] = id
 
+        # flash a notice that the user is registered
         flash("Registered!")
 
-        # send to home page
+        # send to homepage
         return redirect("/")
 
     else:
 
-        # make register.html
+        # render register.html
         return render_template("register.html")
 
 
+# creates an account page that allows the user to change their password
 @app.route("/account", methods=["GET", "POST"])
 @login_required
 def account():
@@ -147,6 +167,7 @@ def account():
         # maintain same session id
         session["user_id"] = rows[0]["id"]
 
+        # flash notice password has changed
         flash("Password changed!")
 
         # Redirect user to home page
@@ -159,24 +180,36 @@ def account():
         return render_template("account.html")
 
 
+# creates a way for users to search for specific albums in our database
 @app.route("/search", methods=["GET", "POST"])
 def search():
+
     if request.method == "POST":
+
+        # make sure query field is filled
         if not request.form.get("query"):
             return apology("value not inputted", 403)
 
+        # set query to a variable
         name = request.form.get("query")
-        print(name)
+
+        # return name to the search function in searched from helpers.py
         return searched(name)
+
+    # render search.html
     else:
         return render_template("search.html")
 
 
+# creates a results page that displays results from the search function
 @app.route("/results", methods=["GET", "POST"])
 def results():
+
+    # render results.html
     return render_template("results.html")
 
 
+# creates a log in page that allows a preexisting user to log in
 @app.route("/login", methods=["GET", "POST"])
 def login():
     """Log user in"""
@@ -187,15 +220,15 @@ def login():
     # User reached route via POST (as by submitting a form via POST)
     if request.method == "POST":
 
-        # Ensure username was submitted
+        # check that username was submitted
         if not request.form.get("username"):
             return apology("must provide username", 403)
 
-        # Ensure password was submitted
+        # check password was submitted
         elif not request.form.get("password"):
             return apology("must provide password", 403)
 
-        # Query database for username
+        # query database for username
         rows = db.execute("SELECT * FROM users WHERE username = ?",
                           request.form.get("username"))
 
@@ -206,14 +239,15 @@ def login():
         # Remember which user has logged in
         session["user_id"] = rows[0]["id"]
 
-        # Redirect user to home page
+        # Redirect user to homepage
         return redirect("/")
 
-    # User reached route via GET (as by clicking a link or via redirect)
+    # render login.html
     else:
         return render_template("login.html")
 
 
+# creates a page that allows a user to log out
 @app.route("/logout")
 def logout():
     """Log user out"""
@@ -221,24 +255,5 @@ def logout():
     # Forget any user_id
     session.clear()
 
+    # redirects to homepage
     return redirect("/")
-
-
-# @app.route("/top")
-# def top():
-#     """Show top albums for each genre"""
-#     topalt = db.execute(
-#         "SELECT DISTINCT fantano.title, fantano.artist, fantano.project_art FROM fantano JOIN metacritic ON fantano.title LIKE metacritic.title WHERE cast(fantano.rating AS Float) > 7.0 AND metacritic.CriticScore > 80 LIMIT 100")
-
-
-# @app.route("/myalbums")
-# @login_required
-# def myalbums():
-#     """Show history of transactions"""
-
-#     # store SQL line in a variable
-#     albums = db.execute(
-#         "SELECT * FROM transactions WHERE user_id = ?", session["user_id"])
-
-#     # make history.html
-#     return render_template("history.html", transactions=transactions)
