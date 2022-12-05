@@ -5,19 +5,25 @@
 {% endblock %}
 
 {% block main %}
+    <!-- creates a form that allows user to register by inputting a username, displayname, and password -->
     <form action="/register" method="post">
         <div class="mb-3">
+            <!-- input for username -->
             <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="username" placeholder="Username" type="text">
         </div>
         <div class="mb-3">
+            <!-- input for display name -->
             <input autocomplete="off" autofocus class="form-control mx-auto w-auto" name="displayname" placeholder="Display Name" type="text">
         </div>
         <div class="mb-3">
+            <!-- input for password -->
             <input class="form-control mx-auto w-auto" name="password" placeholder="Password" type="password">
         </div>
         <div>
+            <!-- input for password confirmation -->
             <input class="form-control mx-auto w-auto" name="confirmation" placeholder="Password (again)" type="password">
         </div>
+        <!-- submit button -->
         <button class="btn btn-primary" type="submit">Register</button>
     </form>
 {% endblock %}
