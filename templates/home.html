@@ -15,9 +15,12 @@ Peanut Gallery
                 <!-- looping through the covers and loading them into our carousel - works with any database with these headers -->
                 {% for cover in covers %}
                 <p id="test"></p>
-                <div class="carousel-item {% if loop.index==1 %} active {% endif %}" id="slide{{ loop.index }}">
-                    <img class="d-block w-100" id="output" src="{{ cover.project_art }}" alt="slide{{ loop.index }}">
-                </div>
+                <a href="/album?title={{ cover.title }}&artist={{ cover.artist }}&cover={{ cover.project_art }}&score={{ cover.score }}">
+                    <div class="carousel-item {% if loop.index==1 %} active {% endif %}" id="slide{{ loop.index }}">
+                        <img class="d-block w-100" id="output" src="{{ cover.project_art }}"
+                            alt="slide{{ loop.index }}">
+                    </div>
+                </a>
                 {% endfor %}
             </div>
         </div>
@@ -44,7 +47,9 @@ Peanut Gallery
                 <!-- looping through using passed table - works with continually updating lists like top 100 -->
                 {% for top in tops %}
                 <li>
-                    <a href="/album?title={{ top.title }}&artist={{ top.artist }}&cover={{ top.project_art }}">{{ top.title }} by {{ top.artist }}</a>
+                    <a
+                        href="/album?title={{ top.title }}&artist={{ top.artist }}&cover={{ top.project_art }}&score={{ top.score }}">{{
+                        top.title }} by {{ top.artist }} Peanut Score: {{ top.score }}</a>
                 </li>
                 {% endfor %}
             </ol>
@@ -52,5 +57,23 @@ Peanut Gallery
     </div>
 </div>
 <hr>
+<!-- fun album suggestion -->
+<h>Try Something New!</h>
+<div class="container">
+    <div class="row">
+        <div class="col-md-4">
+            <ol>
+                <!-- looping through using passed table - works with continually updating lists like random stuff -->
+                {% for rand in rands %}
+                <li>
+                    <a
+                        href="/album?title={{ rand.title }}&artist={{ rand.artist }}&cover={{ rand.project_art }}&score={{ rand.score }}">{{
+                        rand.title }} by {{ rand.artist }} Peanut Score: {{ rand.score }}</a>
+                </li>
+                {% endfor %}
+            </ol>
+        </div>
+    </div>
+</div>
 
 {% endblock %}
