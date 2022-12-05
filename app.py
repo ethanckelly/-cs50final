@@ -49,6 +49,22 @@ def home():
     return render_template("home.html", tops=tops, covers=covers)
 
 
+@app.route("/", methods=["GET", "POST"])
+def home():
+    
+    # query the database to find the top rated albums in our dataset (had to standardize a rating system across metacritic and fantano)
+    tops = db.execute(
+        "SELECT DISTINCT fantano.title, fantano.artist, fantano.project_art, (((cast(fantano.rating AS Float)*10) + cast(metacritic.CriticScore AS Float))/2.0) as score FROM fantano JOIN metacritic ON fantano.title LIKE metacritic.title ORDER BY score DESC LIMIT 100")
+    # query the database for randome links to project art from the fantano table
+    covers = db.execute(
+        "SELECT DISTINCT fantano.title, fantano.artist, fantano.project_art, (((cast(fantano.rating AS Float)*10) + cast(metacritic.CriticScore AS Float))/2.0) as score FROM fantano JOIN metacritic ON fantano.title LIKE metacritic.title ORDER BY RANDOM () LIMIT 50")
+    # table with random albums for our try something new table
+    rands = db.execute(
+        "SELECT * FROM (SELECT DISTINCT fantano.title, fantano.artist, fantano.project_art, (((cast(fantano.rating AS Float)*10) + cast(metacritic.CriticScore AS Float))/2.0) as score FROM fantano JOIN metacritic ON fantano.title LIKE metacritic.title WHERE score>75.0 ORDER BY RANDOM () LIMIT 100) ORDER BY score DESC")
+
+
+    return render_template("home.html", tops=tops, covers=covers, rands=rands)
+
 # creating the homepage
 @app.route("/top", methods=["GET"])
 def top():
