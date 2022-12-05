@@ -49,6 +49,45 @@ def home():
     return render_template("home.html", tops=tops, covers=covers)
 
 
+# creating the homepage
+@app.route("/top", methods=["GET"])
+def top():
+
+    # query the database to find the top rated albums in our dataset (had to standardize a rating system across metacritic and fantano)
+    hiphops = db.execute(
+        "SELECT DISTINCT fantano.title, fantano.artist, fantano.project_art, metacritic.genre, ((cast(fantano.rating AS Float)*10) + cast(metacritic.CriticScore AS Float))/2.0 AS score FROM fantano JOIN metacritic ON fantano.title LIKE metacritic.title WHERE metacritic.genre = 'Hip Hop' ORDER BY ((cast(fantano.rating AS Float)*10) + cast(metacritic.CriticScore AS Float))/2.0 DESC LIMIT 10")
+
+    indierocks = db.execute(
+        "SELECT DISTINCT fantano.title, fantano.artist, fantano.project_art, metacritic.genre, ((cast(fantano.rating AS Float)*10) + cast(metacritic.CriticScore AS Float))/2.0 AS score FROM fantano JOIN metacritic ON fantano.title LIKE metacritic.title WHERE metacritic.genre = 'Indie Rock' ORDER BY ((cast(fantano.rating AS Float)*10) + cast(metacritic.CriticScore AS Float))/2.0 DESC LIMIT 10")
+
+    indiepops = db.execute(
+        "SELECT DISTINCT fantano.title, fantano.artist, fantano.project_art, metacritic.genre, ((cast(fantano.rating AS Float)*10) + cast(metacritic.CriticScore AS Float))/2.0 AS score FROM fantano JOIN metacritic ON fantano.title LIKE metacritic.title WHERE metacritic.genre = 'Indie Pop' ORDER BY ((cast(fantano.rating AS Float)*10) + cast(metacritic.CriticScore AS Float))/2.0 DESC LIMIT 10")
+
+    altrocks = db.execute(
+        "SELECT DISTINCT fantano.title, fantano.artist, fantano.project_art, metacritic.genre, ((cast(fantano.rating AS Float)*10) + cast(metacritic.CriticScore AS Float))/2.0 AS score FROM fantano JOIN metacritic ON fantano.title LIKE metacritic.title WHERE metacritic.genre = 'Alternative Rock' ORDER BY ((cast(fantano.rating AS Float)*10) + cast(metacritic.CriticScore AS Float))/2.0 DESC LIMIT 10")
+
+    sss = db.execute(
+        "SELECT DISTINCT fantano.title, fantano.artist, fantano.project_art, metacritic.genre, ((cast(fantano.rating AS Float)*10) + cast(metacritic.CriticScore AS Float))/2.0 AS score FROM fantano JOIN metacritic ON fantano.title LIKE metacritic.title WHERE metacritic.genre = 'Singer-Songwriter' ORDER BY ((cast(fantano.rating AS Float)*10) + cast(metacritic.CriticScore AS Float))/2.0 DESC LIMIT 10")
+
+    poprocks = db.execute(
+        "SELECT DISTINCT fantano.title, fantano.artist, fantano.project_art, metacritic.genre, ((cast(fantano.rating AS Float)*10) + cast(metacritic.CriticScore AS Float))/2.0 AS score FROM fantano JOIN metacritic ON fantano.title LIKE metacritic.title WHERE metacritic.genre = 'Pop Rock' ORDER BY ((cast(fantano.rating AS Float)*10) + cast(metacritic.CriticScore AS Float))/2.0 DESC LIMIT 10")
+
+    electronics = db.execute(
+        "SELECT DISTINCT fantano.title, fantano.artist, fantano.project_art, metacritic.genre, ((cast(fantano.rating AS Float)*10) + cast(metacritic.CriticScore AS Float))/2.0 AS score FROM fantano JOIN metacritic ON fantano.title LIKE metacritic.title WHERE metacritic.genre = 'Electronic' ORDER BY ((cast(fantano.rating AS Float)*10) + cast(metacritic.CriticScore AS Float))/2.0 DESC LIMIT 10")
+
+    folks = db.execute(
+        "SELECT DISTINCT fantano.title, fantano.artist, fantano.project_art, metacritic.genre, ((cast(fantano.rating AS Float)*10) + cast(metacritic.CriticScore AS Float))/2.0 AS score FROM fantano JOIN metacritic ON fantano.title LIKE metacritic.title WHERE metacritic.genre = 'Folk' ORDER BY ((cast(fantano.rating AS Float)*10) + cast(metacritic.CriticScore AS Float))/2.0 DESC LIMIT 10")
+
+    pops = db.execute(
+        "SELECT DISTINCT fantano.title, fantano.artist, fantano.project_art, metacritic.genre, ((cast(fantano.rating AS Float)*10) + cast(metacritic.CriticScore AS Float))/2.0 AS score FROM fantano JOIN metacritic ON fantano.title LIKE metacritic.title WHERE metacritic.genre = 'Pop' ORDER BY ((cast(fantano.rating AS Float)*10) + cast(metacritic.CriticScore AS Float))/2.0 DESC LIMIT 10")
+
+    rnbs = db.execute(
+        "SELECT DISTINCT fantano.title, fantano.artist, fantano.project_art, metacritic.genre, ((cast(fantano.rating AS Float)*10) + cast(metacritic.CriticScore AS Float))/2.0 AS score FROM fantano JOIN metacritic ON fantano.title LIKE metacritic.title WHERE metacritic.genre = 'R&B' ORDER BY ((cast(fantano.rating AS Float)*10) + cast(metacritic.CriticScore AS Float))/2.0 DESC LIMIT 10")
+
+    # render the home.html template and return tops and covers
+    return render_template("top.html", hiphops=hiphops, indierocks=indierocks, indiepops=indiepops, altrocks=altrocks, sss=sss, poprocks=poprocks, electronics=electronics, folks=folks, pops=pops, rnbs=rnbs)
+
+
 # creates our album page: displays a specific album with it's album art if it exists and it's title and artist. also allows users to review the album
 @app.route("/album", methods=["GET", "POST"])
 def album():
@@ -67,9 +106,12 @@ def album():
         elif not request.form.get("rating"):
             return apology("must provide rating", 400)
 
+        elif not request.form.get("dname"):
+            return apology("must provide display name", 400)
+
         # insert a new row into the reviews table with the relevant review
-        db.execute("INSERT INTO reviews (album, artist, userid, review, rating) VALUES(?, ?, ?, ?, ?)", request.form.get(
-            "atitle"), request.form.get("aartist"), session["user_id"], request.form.get("review"), request.form.get("rating"))
+        db.execute("INSERT INTO reviews (album, artist, userid, displayname, review, rating) VALUES(?, ?, ?, ?, ?, ?)", request.form.get(
+            "atitle"), request.form.get("aartist"), session["user_id"], request.form.get("dname"), request.form.get("review"), request.form.get("rating"))
 
         # flash a notice that the review was submitted
         flash("Review Submitted!")
