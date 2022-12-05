@@ -11,7 +11,7 @@ Album
 <h id="artist"></h>
 <div class="row d-flex justify-content-center">
     <div class="col-md-4">
-        <img class="d-block w-100" id="cover" alt="Album Cover">
+        <img class="d-block w-100" id="cover" alt="Missing Album Cover">
     </div>
 </div>
 <p></p>
@@ -27,15 +27,16 @@ Album
             type="text">
     </div>
     <div class="mb-3">
-        <input autocomplete="off" class="form-control mx-auto w-auto" id="rating" name="rating" placeholder="Your Rating"
-            type="number">
+        <input autocomplete="off" class="form-control mx-auto w-auto" id="rating" name="rating"
+            placeholder="Your Rating" type="number">
     </div>
     <div class="mb-3">
-        <textarea autocomplete="off" class="form-control mx-auto w-auto" id="review" name="review" placeholder="Write your review here!"
-            type="text"></textarea><br>
+        <textarea autocomplete="off" class="form-control mx-auto w-auto" id="review" name="review"
+            placeholder="Write your review here!" type="text"></textarea><br>
     </div>
     <button class="btn btn-primary" type="submit">Submit</button>
 </form>
+
 <script type="text/javascript">
     const queryString = window.location.search;
     const urlParams = new URLSearchParams(queryString);
