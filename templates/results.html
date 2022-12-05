@@ -10,11 +10,41 @@ Find an Album
         <div class="col-md-4">
             <ol>
                 {% for result in results %}
-                <li>{{ result.title }} by {{ result.artist }}</li>
+                <li>
+
+                    <a href="/album?title={{ result.title }}&artist={{ result.artist }}&cover={{ result.project_art }}">{{
+                        result.title }} by {{ result.artist }}</a>
+                </li>
+                <script>
+                    console.log("hello")
+                    console.log(result)
+                </script>
                 {% endfor %}
             </ol>
         </div>
     </div>
 </div>
+<hr>
+<table style="width:800px" align="center">
+    <thead>
+        <tr>
+            <th>Title</th>
+            <th>Artist</th>
+            <th>Review</th>
+            <th>Rating</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for review in reviews %}
+        <tr>
+            <td>{{ review.title }}</td>
+            <td>{{ review.artist }}</td>
+            <td>{{ review.review }}</td>
+            <td>{{ review.rating }}</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
 <hr>
 {% endblock %}
