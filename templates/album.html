@@ -8,7 +8,8 @@ Album
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <!-- tags where javascript writes to to display the information about the album -->
 <h1 id="title"></h1>
-<h id="artist"></h>
+<h3 id="artist"></h3>
+<h5 id="score"></h5>
 <!-- album cover - displays missing error if we don't have one -->
 <div class="row d-flex justify-content-center">
     <div class="col-md-4">
@@ -16,6 +17,7 @@ Album
     </div>
 </div>
 <hr>
+{% if session["user_id"] %}
 <!-- form to review the album with places for title, artist, rating, and review -->
 <h5>Rate and review this album!</h5>
 <p> Rating must be a whole number from 0 to 5</p>
@@ -38,7 +40,8 @@ Album
     </div>
     <button class="btn btn-primary" type="submit">Submit</button>
 </form>
-
+<!-- only review if user is logged in -->
+{% endif %}
 <!-- javascript to scrub the url for the variables put there from the results page
 this allows us to use the same html page for each album instead of new ones -->
 <script type="text/javascript">
@@ -49,9 +52,11 @@ this allows us to use the same html page for each album instead of new ones -->
     const title = urlParams.get('title');
     const artist = urlParams.get('artist');
     const cover = urlParams.get('cover');
+    const score = urlParams.get('score');
     // write the variables to the right places
     document.getElementById('title').innerHTML = title;
     document.getElementById("artist").innerHTML = artist;
+    document.getElementById("score").innerHTML = "Peanut Score: " + score;
     document.getElementById("cover").src = cover;
 </script>
 {% endblock %}
