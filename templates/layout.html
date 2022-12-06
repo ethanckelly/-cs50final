@@ -3,6 +3,16 @@
 <html lang="en">
 
 <head>
+    <!-- decisions for text style -->
+
+    <style>
+        body {background-color: #2b2b2b;}
+        h1   {color: white;}
+        p    {color: white;}
+        ol {color: white;}
+        h {color:white;}
+        </style>
+
     <!-- template for everything else -->
 
     <meta charset="utf-8">
@@ -31,13 +41,23 @@
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
         crossorigin="anonymous"></script>
 
-    <link href="/static/styles.css" rel="stylesheet">
+    <link href="/static/style.css" rel="stylesheet">
 
     <title>Peanut Gallery: </title>
 
 </head>
 
 <body>
+
+    <!-- adjusting the style of the pages -->
+    <style>
+        body {background-color: #2b2b2b;}
+        h1   {color: white;}
+        p    {color: white;}
+        body {
+        background-image: url("https://i.imgur.com/KrAOLf8.png");
+            }
+    </style>
 
     <!-- navbar -->
     <nav class="bg-light border navbar navbar-expand-md navbar-light">
@@ -50,22 +70,24 @@
                 <!-- giving all the buttons for rediracting - only allowing access to profile if logged in -->
                 {% if session["user_id"] %}
                     <ul class="navbar-nav me-auto mt-2">
+                        <img src="https://i.imgur.com/MVoWzbu.png" width="50" height="50">
                         <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
                         <li class="nav-item"><a class="nav-link" href="/top">Top Charts</a></li>
                         <li class="nav-item"><a class="nav-link" href="/suggest">Suggest an Album</a></li>
                         <li class="nav-item"><a class="nav-link" href="/search">Search</a></li>
                         <!--<li class="nav-item"><a class="nav-link" href="/add">Add</a></li>-->
                     </ul>
-                    <ul class="navbar-nav ms-auto mt-2">
+                    <!-- <ul class="navbar-nav ms-auto mt-2"> -->
                         <li class="nav-item"><a class="nav-link" href="/account">Account</a></li>
                         <li class="nav-item"><a class="nav-link" href="/logout">Log Out</a></li>
                     </ul>
                 {% else %}
                     <ul class="navbar-nav me-auto mt-2">
+                        <img src="https://i.imgur.com/MVoWzbu.png" width="50" height="50">
                         <li class="nav-item"><a class="nav-link" href="/">Home</a></li>
                         <li class="nav-item"><a class="nav-link" href="/top">Top Charts</a></li>
                         <li class="nav-item"><a class="nav-link" href="/search">Search</a></li>
-                    <ul class="navbar-nav ms-auto mt-2">
+                    <!-- <ul class="navbar-nav ms-auto mt-2"> -->
                         <li class="nav-item"><a class="nav-link" href="/register">Register</a></li>
                         <li class="nav-item"><a class="nav-link" href="/login">Log In</a></li>
                     </ul>
