@@ -29,7 +29,7 @@ Peanut Gallery
 </div>
 <hr>
 <!-- top 100 list -->
-<h>Today's Top 100</h>
+<h1>Today's Top 100</h1>
 <div class="container">
     <div class="row">
         <div class="col-md-4">
@@ -37,9 +37,11 @@ Peanut Gallery
                 <!-- looping through using passed table - works with continually updating lists like top 100 -->
                 {% for top in tops %}
                 <li>
-                    <a
-                        href="/album?title={{ top.title }}&artist={{ top.artist }}&cover={{ top.project_art }}&score={{ top.score }}">{{
-                        top.title }} by {{ top.artist }} Peanut Score: {{ top.score }}</a>
+                     <!-- adapted from bootstrap: https://getbootstrap.com/docs/4.0/components/list-group/ -->
+                    <div class="list-group">
+                        <a class="list-group-item list-group-item-mine" href="/album?title={{ top.title }}&artist={{ top.artist }}&cover={{ top.project_art }}&score={{ top.score }}">{{
+                            top.title }} by {{ top.artist }} <br> Peanut Score: {{ top.score }} </a>
+                    </div>
                 </li>
                 {% endfor %}
             </ol>
@@ -47,7 +49,7 @@ Peanut Gallery
     </div>
 </div>
 <hr>
-<h>Try Something New!</h>
+<h1>Try Something New!</h1>
 <div class="container">
     <div class="row">
         <div class="col-md-4">
@@ -55,9 +57,11 @@ Peanut Gallery
                 <!-- looping through using passed table - works with continually updating lists like random stuff -->
                 {% for rand in rands %}
                 <li>
-                    <a
-                        href="/album?title={{ rand.title }}&artist={{ rand.artist }}&cover={{ rand.project_art }}&score={{ rand.score }}">{{
-                        rand.title }} by {{ rand.artist }} Peanut Score: {{ rand.score }}</a>
+                    <!-- adapted from bootstrap: https://getbootstrap.com/docs/4.0/components/list-group/ -->
+                    <div class="list-group">
+                        <a class="list-group-item list-group-item-mine" href="/album?title={{ rand.title }}&artist={{ rand.artist }}&cover={{ rand.project_art }}&score={{ rand.score }}">{{
+                            rand.title }} by {{ rand.artist }} <br> Peanut Score: {{ rand.score }}</a>
+                    </div>
                 </li>
                 {% endfor %}
             </ol>
